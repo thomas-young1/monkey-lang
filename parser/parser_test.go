@@ -8,10 +8,10 @@ import (
 )
 
 func TestLetStatements(t *testing.T) {
-	tests := []struct{
-		input string
+	tests := []struct {
+		input              string
 		expectedIdentifier string
-		expectedValue interface{}
+		expectedValue      interface{}
 	}{
 		{"let x = 5;", "x", 5},
 		{"let y = true;", "y", true},
@@ -132,9 +132,9 @@ func TestIntegerLiteral(t *testing.T) {
 
 func TestParsingPrefixExpressions(t *testing.T) {
 	prefixTests := []struct {
-		input string
+		input    string
 		operator string
-		value interface{}
+		value    interface{}
 	}{
 		{"!5", "!", 5},
 		{"-15", "-", 15},
@@ -172,9 +172,9 @@ func TestParsingPrefixExpressions(t *testing.T) {
 
 func TestParsingInfixExpressions(t *testing.T) {
 	infixTests := []struct {
-		input string
-		leftValue interface{}
-		operator string
+		input      string
+		leftValue  interface{}
+		operator   string
 		rightValue interface{}
 	}{
 		{"5 + 5;", 5, "+", 5},
@@ -223,9 +223,9 @@ func TestParsingInfixExpressions(t *testing.T) {
 
 func TestOperatorPrecedenceParsing(t *testing.T) {
 	tests := []struct {
-		input string
+		input    string
 		expected string
-	} {
+	}{
 		{
 			"-a * b",
 			"((-a) * b)",
@@ -503,7 +503,7 @@ func TestFunctionalLiteralParsing(t *testing.T) {
 
 func TestFunctionParameterParsing(t *testing.T) {
 	tests := []struct {
-		input string
+		input          string
 		expectedParams []string
 	}{
 		{input: "fn() {};", expectedParams: []string{}},
@@ -512,7 +512,7 @@ func TestFunctionParameterParsing(t *testing.T) {
 	}
 
 	for _, tt := range tests {
-		l := lexer.New(tt.input);
+		l := lexer.New(tt.input)
 		p := New(l)
 
 		program := p.ParseProgram()
@@ -568,7 +568,7 @@ func TestCallExpressionParsing(t *testing.T) {
 }
 
 func testLetStatement(t *testing.T, s ast.Statement, name string) bool {
-	
+
 	if s.TokenLiteral() != "let" {
 		t.Errorf("s.TokenLiteral not 'let'. got=%q", s.TokenLiteral())
 		return false
@@ -595,7 +595,7 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 		return false
 	}
 
-	if  integ.Value != value {
+	if integ.Value != value {
 		t.Errorf("integ.Value not %d. got=%d", value, integ.Value)
 		return false
 	}
@@ -608,7 +608,7 @@ func testIntegerLiteral(t *testing.T, il ast.Expression, value int64) bool {
 	return true
 }
 
-func  testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
+func testIdentifier(t *testing.T, exp ast.Expression, value string) bool {
 	ident, ok := exp.(*ast.Identifier)
 	if !ok {
 		t.Errorf("exp not *ast.Identifer. got=%T", exp)

@@ -11,45 +11,45 @@ import (
 const (
 	_ int = iota
 	LOWEST
-	EQUALS // ==
+	EQUALS      // ==
 	LESSGREATER // > or <
-	SUM // +
-	PRODUCT // *
-	PREFIX // -X or !X
-	CALL // myFunction(x)
+	SUM         // +
+	PRODUCT     // *
+	PREFIX      // -X or !X
+	CALL        // myFunction(x)
 )
 
 var precendences = map[token.TokenType]int{
-	token.EQ: EQUALS,
-	token.NOT_EQ: EQUALS,
-	token.LT: LESSGREATER,
-	token.GT: LESSGREATER,
-	token.PLUS: SUM,
-	token.MINUS: SUM,
-	token.SLASH: PRODUCT,
+	token.EQ:       EQUALS,
+	token.NOT_EQ:   EQUALS,
+	token.LT:       LESSGREATER,
+	token.GT:       LESSGREATER,
+	token.PLUS:     SUM,
+	token.MINUS:    SUM,
+	token.SLASH:    PRODUCT,
 	token.ASTERISK: PRODUCT,
-	token.LPAREN: CALL,
+	token.LPAREN:   CALL,
 }
 
 type (
 	prefixParseFn func() ast.Expression
-	infixParseFn func(ast.Expression) ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
 )
 
 type Parser struct {
-	l *lexer.Lexer
+	l      *lexer.Lexer
 	errors []string
 
-	curToken token.Token
+	curToken  token.Token
 	peekToken token.Token
 
 	prefixParseFn map[token.TokenType]prefixParseFn
-	infixParseFn map[token.TokenType]infixParseFn
+	infixParseFn  map[token.TokenType]infixParseFn
 }
 
 func New(l *lexer.Lexer) *Parser {
 	p := &Parser{
-		l: l,
+		l:      l,
 		errors: []string{},
 	}
 
@@ -103,7 +103,7 @@ func (p *Parser) ParseProgram() *ast.Program {
 	for !p.curTokenIs(token.EOF) {
 		stmt := p.parseStatement()
 		if stmt != nil {
-			program.Statements =  append(program.Statements, stmt)
+			program.Statements = append(program.Statements, stmt)
 		}
 		p.nextToken()
 	}
@@ -124,7 +124,7 @@ func (p *Parser) parseStatement() ast.Statement {
 
 func (p *Parser) parseLetStatement() *ast.LetStatement {
 	stmt := &ast.LetStatement{Token: p.curToken}
-	
+
 	if !p.expectPeek(token.IDENT) {
 		return nil
 	}
@@ -199,7 +199,7 @@ func (p *Parser) parseIdentifier() ast.Expression {
 
 func (p *Parser) parsePrefixExpression() ast.Expression {
 	expression := &ast.PrefixExpression{
-		Token: p.curToken,
+		Token:    p.curToken,
 		Operator: p.curToken.Literal,
 	}
 
@@ -212,9 +212,9 @@ func (p *Parser) parsePrefixExpression() ast.Expression {
 
 func (p *Parser) parseInfixExpression(left ast.Expression) ast.Expression {
 	expression := &ast.InfixExpression{
-		Token: p.curToken,
+		Token:    p.curToken,
 		Operator: p.curToken.Literal,
-		Left: left,
+		Left:     left,
 	}
 
 	precendence := p.curPrecedence()

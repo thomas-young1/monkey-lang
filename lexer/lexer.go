@@ -3,10 +3,10 @@ package lexer
 import "monkey/token"
 
 type Lexer struct {
-	input string
-	position int // current position in input (points to current char)
-	readPosition int // current reading position in input (after current char)
-	ch byte // current char under examination
+	input        string
+	position     int  // current position in input (points to current char)
+	readPosition int  // current reading position in input (after current char)
+	ch           byte // current char under examination
 }
 
 func New(input string) *Lexer {
@@ -89,7 +89,6 @@ func (l *Lexer) NextToken() token.Token {
 			tok = newToken(token.ILLEGAL, l.ch)
 		}
 	}
-	
 
 	l.readChar()
 	return tok
